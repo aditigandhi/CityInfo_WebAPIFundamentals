@@ -1,0 +1,147 @@
+#### GetStandardsListByOrganizationUnitKey.sql
+
+# Finding all references to EF.OrganizationUnit
+
+1. FacilityUpsert.sql
+2. GetAllHeathSystems.sql
+	remove lines 72-75 {inner joining for orgunitkey does nothing)
+3. GetDERSDataSetsByIDNKey.sql
+	remove lines 41-44
+4. GetOrganizationUnitHierarchy.sql
+	getting certain values and associating it with the orgunittypekey
+5. IDNUpsert.sql
+	Adding orgunitkey stuff into the Ef.organizationunit sproc and then add it to EF.IDN too
+	updating and deleting them too.
+6.OrganizationUnitUpsert.sql
+	Adding/Updating EF.IDN &  EF.Facility
+7. Company.sql
+8. Facility.sql
+9. IDN.sql
+10. AddCFFacilities.sql
+11. AddCFIDNs.sql
+12. Company.sql
+
+---
+API_GetAllFacilities.sql remove lines 41-44
+DeleteIDN.sql UPDATE/REMOVE/ALTERRRR lines 29-33
+DeleteIDN.sql UPDATE/REMOVE/ALTERRRR lines 42-50
+DeleteIDN.sql deleling this section that deletes from EF.OrganizationUnit lines 2683-2690
+GetAllHeathSystems delete lines 72-75
+GetAssociatedBidirectionalSystemByFormularyKey.sql delete line 22
+
+# Adding Columns to Database, finding all their references
+
+* CF.IDN change OrganizationUnitKey to IDNKEY
+	- GetCFFormulariesByOrganizationUnitKey.sql line 34
+	- IDNUpsert.sql line 78
+	- usp_AssignFacilityToFormulary.sql   line 31
+	** Idn.table.sql line 13
+	----------------------------------------------------
+	
+* CF.Facility change OrganizationUnitKey to FAcilityKey
+	- usp_FacilityUpsert.sql line 25, 78, 97
+	- usp_SyncPFFacilityFormularyAssociation.sql 65
+	- usp_SyncSFFacilityFormularyAssociaiton.sql 67
+	- DeleteIDN 2582, 2599, 2613
+	** Facility.table.sql line 13, 28
+	----------------------------------------------------
+	
+* Integration.CFSyncFormulary OrganizationUnitKey to IDNKEY
+	- usp_SyncFormularyBySystemFormularyKEy.sql line 93, 274, 285, 296, 317, 355
+	- DeleteIDN line 2419
+----------------------------------------------------
+
+* EF.Formulary OrganizationUnitKey to IDNKEY
+	- usp_SyncFormularyBySystemFormularyKEy.sql line 150, 248, 207, 191
+	- fn_SFItemDescription.sql line 56
+	- API_GetGroupFormulariesByOrganizationUnitKey.sql line 59, 37, 119, 72
+	- API_GetGroupFromularyItemByFormularyItemKey.sql line 120, 63
+	- API_GetGroupFormularyItemsByFormularyGroupKey.sql line 66
+	- API_GetSystemFormulariesforIDN.sql line 77, 144, 69 edit, remove line 65
+	- API_GetSystemFormularyItemByFormularyItemKey.sql line 125, 61
+	- API_GetSystemFormularyItemList.sql line 122, 111
+	- API_GetSystemFormularyItemNDCs.sql line 46
+	- API_GetSystemFormularyItemsByFormularyItemKeys.sql line 46
+	- API_GetSystemFormularyItemsByFormularyItemKeys lilne 97
+	- API_GetSystemFormularyItemsHistoryByFormularyKey.sql line 225
+	- API_GetSystemItemsByFormularyKey.sql line 57
+	- CopySystemFormularyItemDetailsToAnother.sql line 349
+	- CreateMissingSystemReferenceData.sql line 99, 142, 93, 136, 76, 119
+	- DeleteIDN.sql line 2358, 2397, 2478, 2504, 2530, 2553, 146
+	- DeleteSystemFormularyItemRead.sql line 48
+	- DeleteSystemFormularyItems.sql line 58
+	- DelteSystemFormularyItemWrite.sql line 43
+	- DeleteSystemFormularyRead.sql line 81
+	- DeleteSystemFormularyWrite.sql line 26, 34
+	- FormularyFileImportUpsert.sql line 56
+	- FormularyITemFileImportITem.sql line 154
+	- GetAllHeathSystems line 32
+	- GetAssociatedBidirectionalSystemByFormularyKey line 26
+	- GetAssociatedFacilitiesByIDNKeyAndSystemFormularyKey line 57, 53
+	- GetAvailableFacilitiesByIDNKeyAndSystemFormulary.sql line 36
+----------------------------------------------------
+
+DAY2****
+*EF.AdministrationRoute OrganizationUnitKey to IDNKEY
+- CopyFormularyAdministrationRoutes.sql line 16, 26
+- DeleteIDN 2369
+----------------------------------------------------
+
+** ReferenceData.ReferenceDataItem
+	- CopySystemFormularyItemDetailsToAnother.sql line 346, 324
+	- CreateMissingSystemReferenceData line 142, 184, 228, 270, 65, 108, 151, 194, 237
+	- DeleteIDN line 1898, 1911, 1921
+	- FormularyItemTherapeuticClassAssociationUpsert line 189, 354
+----------------------------------------------------
+
+* EF.ToDoItem OrganizationUnitKey to IDNKEy
+- DeleteIDN line 2408
+----------------------------------------------------
+
+* IdentityServer.ClientOrganization to  IDNKEY
+- DeleteIDN line 2464, 2434, 2451
+- GetAllHeathSystems line 79
+----------------------------------------------------
+
+
+* EF.Standard
+- DeleteStandard.sql line 76
+	----------------------------------------------------
+	
+* EF.AdministrationRouteHistory_Obsoleted
+
+* EF.FormularyHistory_Obsoleted
+
+* EF.StandardHistory_Obsoleted
+
+* EF.SystemOrganizationFormulary
+- GetMappedSystemFormulariesByPharmacyFormularyKey line 31
+
+* [ReferenceDataItemHistory_Obsoleted]
+
+----------------------------------------------------
+----------------------------------------------------
+----------------------------------------------------
+----------------------------------------------------
+REMOVE PARAMETER
+GetFormularyItemMappignActionHistory
+GetFormularyGroupItemsByFormularyGroupKey
+
+Question
+GetOrganizationUnitHierarchy
+GetOrgUnitTypeSecurityKey
+GetReferenceDataForSystemFormularies
+GetStandardDataMapStatus
+GetMessageInternalQueueList (main table no longer exists)
+EF.StandardHistory??? what does orgunitkey mean here (already has idnkey that has differing values)
+EnterpriseFormulary-MessageQueueAlert (main table no longer exists)
+
+CF TAbles
+
+EXtRA USER DEFINED TABLES:
+EF-SaveMappingActionFormularyItemData.sql
+EF-UpdatePharmacyFormularyItemMappingApprovalData.sql
+
+Come back to this one;
+EF_MigrateCustomHistoryTablesWithSysHistoryTables
+	
